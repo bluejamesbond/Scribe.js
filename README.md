@@ -55,11 +55,18 @@ npm install colors
 npm install moment
 npm install mkdirp
 npm install callsite
+npm install express
 ```
 5. Logging with Scribe
 ----
+Remember to change the 'mainUser' configuration property to the name of the account which is running the NodeJS server.
+
+To view the control panel go to http://localhost:3001/log
 ```js
 var scribe = require('./scribe');     
+var express = require('express');
+var http = require('http');
+var app = express();
 
 // Configuration
 // --------------
@@ -129,6 +136,15 @@ console.log("Your message");                             // [invokedFrom.js:25] 
     console.log("yeeha");                                // [scoped-tag]           yeeha
     
 })(console.t('scoped-tag'));
+
+app.set('port', process.env.PORT || 3001);
+http.createServer(app)
+    .listen(
+            app.get('port'), function(){
+                            console.log("Express server listening on port %s in %s mode."
+                                , app.get('port')
+                                , app.settings.env);
+                            });
 
 ```
 6. Experimental
