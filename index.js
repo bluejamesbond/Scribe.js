@@ -341,6 +341,16 @@ console.t = function(n, _) {
     return ext;
 };
 
+//Print day, example: 'Sep_8_14'
+console.day = function () {
+    return new Extender(moment().format('MMM_D_YY') + spaces($.indentation));
+}
+
+//Print time, example '9:14:67 AM'
+console.time = function () {
+    return new Extender(moment().format('MMM_D_YY h:mm:ss A') + spaces($.indentation));
+}
+
 console.f = function(n, _) {
 
     if (!n) {
@@ -389,11 +399,12 @@ function addPipe(n) {
 
     console[n] = (function(i) {
 
-        if (validate()) {
-            createDir();
-        }
 
         return function() {
+
+            if (validate()) {
+                createDir();
+            }
 
             var utfs = (arguments.length === 1 ? pretty(arguments[0]) : util.format.apply(util, arguments)).trim();
             var time = moment().format('h:mm:ss A');
