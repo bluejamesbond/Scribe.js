@@ -1,7 +1,6 @@
 /* jshint -W079 */
 (function() {
-    var auth = require('http-auth'), // @see https://github.com/gevorg/http-auth
-        express = require('express'),
+    var express = require('express'),
         app = express(),
         scribe = require('../scribe')(),
         console = process.console;
@@ -13,16 +12,20 @@
      * User : test
      * Pwd  : tes
      */
-    var basicAuth = auth.basic({ //basic auth config
-        realm: "ScribeJS WebPanel",
-        file: __dirname + "/users.htpasswd" // test:test
-    });
 
     app.get('/', function(req, res) {
         res.send('Hello world, see you at /logs');
     });
 
-    app.use('/logs', auth.connect(basicAuth), scribe.webPanel());
+    //Handle your authentication here... use next if valid... redirect away otherwise!
+    var auth = function(req, res, next) {
+      if (req.user.admin) {
+        return next();
+      }
+      return res.redirect("/");
+    };
+
+    app.use('/logs', auth, scribe.webPanel());
 
     //Make some logs
     console.addLogger('log');
