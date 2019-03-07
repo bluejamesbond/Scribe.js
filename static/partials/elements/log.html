@@ -36,7 +36,7 @@
     </span>
 
     <span class="log__item log__message" ng-if="log.hasOwnProperty('argsString')">
-        <span>{{log.argsString}}</span>
+        <span ng-bind-html="log.argsString | trust"></span>
     </span>
 
     <span class="log__item log__json" ng-if="!log.hasOwnProperty('argsString')">
